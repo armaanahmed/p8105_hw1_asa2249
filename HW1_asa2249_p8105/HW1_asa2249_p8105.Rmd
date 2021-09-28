@@ -1,0 +1,127 @@
+---
+title: "HW1_asa2249_BIST8105"
+author: "Armaan Ahmed"
+date: "9/28/2021"
+output: html_document
+# This is a script for HW1 for BIST8105, Data Science, taught by Professor Jeff Goldsmith. In this script, I will demonstrate usage of R Markdown, GitHub for version control, and the use of R Projects. 
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## here I load necessary packages for the script
+```{r load_packages}
+  library(tidyverse)
+  library(ggplot2)
+  library(palmerpenguins)
+```
+
+
+## Problem 1
+```{r Problem_1a, echo=TRUE}
+# I decided to set echo to true, so you can see both my code and the results in the knitted HTML file.
+
+# problem1_DF is a data frame that consists of various data types, including a standard normal distribution of numbers, boolean values, character and factor vectors.
+
+problem1_DF = 
+  tibble(
+    normal_distribution_values = rnorm(10),
+    logical_vector = normal_distribution_values>0,
+    charactor_vector_10 = c("go", "on", "I", "know", "it", "not", "me", "not", "hermoine", "YOU"),
+    factor_vector_10 = factor(c("harry", "hermoine", "ron", "ron", "ron", "hermoine", "harry", "hermoine", "harry", "ron"))
+  )
+
+# generates a table of problem1_DF to inspect whether values have successfully been input
+view(problem1_DF, n = 10)
+
+# Take the mean of each set of values in the dataframe
+
+# Take the mean of the normally distributed 10 values that were generated
+ndist_mean = mean(problem1_DF %>% pull(1))
+ndist_mean
+#ndist_mean = ~-0.228, which is about what we would expect
+
+# Take the mean of the logical vector
+logvec_mean = mean(problem1_DF %>% pull(2))
+logvec_mean
+# logvec_mean = 0.3, which assumes TRUE = 1, and FALSE = 0.
+
+# Take the mean of the character vector
+chvec_mean = mean(problem1_DF %>% pull(3))
+chvec_mean
+
+# Take the mean of the factor vector
+factor_mean = mean(problem1_DF %>% pull(4))
+factor_mean
+```
+
+# this code chunk converts logical, character and factor variables into a numeric type, derived from the problem1_DF dataframe and using the as.numeric function.
+
+
+
+```{r Problem_1b,eval = FALSE}
+#eval is set to false to show the chunk, not the output
+# Convert the logical vector into a numeric type
+logical_vector = problem1_DF %>% pull(2)
+logical_vector_numeric = as.numeric(logical_vector)
+logvec_mean_num = mean(logical_vector_numeric)
+logvec_mean_num
+# logvec_mean_num = 0.4 (this varies depending on the run), which assumes TRUE = 1, and FALSE = 0. This is the same as before, because R interprets booleans as TRUE = 1 and FALSE = 0.
+
+# Convert the character vector into a numeric type
+charactor_vector = problem1_DF %>% pull(3)
+charactor_vector_numeric = as.numeric(charactor_vector)
+character_vector_mean_num = mean(charactor_vector_numeric)
+character_vector_mean_num
+# character_vector_mean_num =
+
+
+# Convert the factor vector into a numeric type
+factor_vector = problem1_DF %>% pull(4)
+factor_vector_numeric = as.numeric(factor_vector)
+factor_vector_mean_num = mean(factor_vector_numeric)
+factor_vector_mean_num
+# factor_vector_mean_num = 2.1, because as.numeric converts the charactor factor vector values into 1, 2, 3 (or levels), which we can now take the mean of. 
+
+```
+
+
+Problem 2
+```{r Problem_2, echo = TRUE}
+#load the penguins dataset
+data("penguins", package = "palmerpenguins")
+
+#determine some summary statistics about the penguins dataset
+summary(penguins)
+#running the summary function, we see that there are three species (Adelie, Chinstrap, and Gentoo) and three islands (Biscoe, Dream, Torgersen). There are 152 Adelie penguins, 68 Chinstrap penguins. Other variables of interest include the average bill length and bill depth, flipper length, body mass, penguin sex and year of observation.
+head(penguins)
+
+#the number of rows and columns in the penguins dataset
+num_columns = ncol(penguins)
+num_columns
+num_rows = nrow(penguins)
+num_rows
+#there are 344 rows and 8 columns in the penguins dataset.
+
+#the mean flipper length
+flipper_length_mm = penguins %>% pull(3) %>% na.omit()
+flipper_length_mm_mean = mean(flipper_length_mm)
+flipper_length_mm_mean
+ 
+#the mean flipper length of the penguins in this dataset is 43.92193mm
+```
+
+```{r problem_2_plot, echo = TRUE}
+#generate a scatterplot of bill_length_mm (x) vs flipper_length_mm (y), with points colored by species
+flipper_plot = ggplot(data = penguins, aes(x = bill_length_mm, y =flipper_length_mm, color = species)) + geom_point() + ggtitle("Flipper Length vs Bill Length \n by Penguin Species") + xlab("Bill Length (mm)") + ylab("Flipper Length (mm)")
+plot(flipper_plot)
+
+#save the scatterplot
+ggsave("scatter_plot.pdf", height = 4, width = 6)
+
+```
+
+
+
