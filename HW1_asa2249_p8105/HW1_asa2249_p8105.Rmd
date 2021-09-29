@@ -11,15 +11,15 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-load necessary packages for the script
-```{r load_packages}
+## load necessary packages for the script
+```{r load_packages, message=FALSE}
   library(tidyverse)
   library(ggplot2)
   library(palmerpenguins)
 ```
 
 
-Problem 1
+## Problem 1
 ```{r Problem_1a, echo=TRUE}
 # I decided to set echo to true, so you can see both my code and the results in
 # the knitted HTML file.
@@ -38,7 +38,7 @@ problem1_DF =
 
 # generates a table of problem1_DF to inspect whether values have successfully
 # been input
-view(problem1_DF, n = 10)
+head(problem1_DF)
 
 # Take the mean of each set of values in the dataframe
 
@@ -64,7 +64,7 @@ factor_mean
 # NA when we try to calculate the mean
 ```
 
-this code chunk converts logical, character and factor variables into a numeric type, derived from the problem1_DF dataframe and using the as.numeric function.
+## this code chunk converts logical, character and factor variables into a numeric type, derived from the problem1_DF dataframe and using the as.numeric function.
 ```{r Problem_1b,eval = FALSE}
 # eval is set to false to show the chunk, not the output
 # Convert the logical vector into a numeric type
@@ -78,10 +78,10 @@ logvec_mean_num
 
 # Convert the character vector into a numeric type
 character_vector = problem1_DF %>% pull(3)
-character_vector_numeric = as.numeric(character_vector)
+character_vector_numeric = as.numeric(as.factor(character_vector))
 character_vector_mean_num = mean(character_vector_numeric)
 character_vector_mean_num
-# character_vector_mean_num comes out as NA, because there is no way to convert a character to a numerical value. in UNICODE (java), characters do have a numeric equivalent. 
+# character_vector_mean_num comes out as NA, because there is no way to convert a character to a numerical value. in UNICODE (java), characters do have a numeric equivalent. If you dissociate the charactor_vector using as.factor, then you get a numeric equivalent by level that you can then calculate the mean for.
 
 # Convert the factor vector into a numeric type
 factor_vector = problem1_DF %>% pull(4)
@@ -95,7 +95,7 @@ factor_vector_mean_num
 ```
 
 
-Problem 2
+## Problem 2
 ```{r Problem_2, echo = TRUE}
 # load the penguins dataset
 data("penguins", package = "palmerpenguins")
@@ -123,7 +123,7 @@ flipper_length_mm_mean
  
 # the mean flipper length of the penguins in this dataset is 43.92193mm
 ```
-
+## Plot of Flipper length vs Bill length (by penguin species)
 ```{r problem_2_plot, echo = TRUE, warning = FALSE}
 # generate a scatterplot of bill_length_mm (x) vs flipper_length_mm (y), with 
 # points colored by species
